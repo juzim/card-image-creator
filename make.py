@@ -3,6 +3,7 @@ import glob
 from pathlib import Path
 from datetime import datetime
 import fire
+import yaml
 
 CARD_WIDTH = 640
 CARD_HEIGHT = 1010
@@ -16,10 +17,10 @@ CANVAS_WIDTH = 2480
 SPACING_X = 40
 SPACING_Y = 40
 
-DEFAULT_OFFSET_X = 20
-DEFAULT_OFFSET_Y = 20
+DEFAULT_OFFSET_X = 50
+DEFAULT_OFFSET_Y = 50
 
-EXTENSIONS = ['png', 'jpg', 'jpeg']
+EXTENSIONS = ['.png', '.jpg', '.jpeg']
 
 
 ROOT = Path(__file__).parent.absolute()
@@ -55,17 +56,33 @@ def get_font(lines: str, image: Image, font_family: str):
 
 
 def run():
-
     offset_x = DEFAULT_OFFSET_X
     offset_y = DEFAULT_OFFSET_Y
-    canvas = Image.new('RGB', (CANVAS_WIDTH, CANVAS_HEIGTH), color = (255, 255, 255))
+
+    pages = []
+
 
     text_box = build_text_box()
-
+    page = None
     for filepath in glob.iglob(f'{INPUT_PATH}/*.*'):
-        print(f'Handling {filepath}')
+        card_config = {}
+        text = None
 
         path = Path(filepath)
+        if not path.suffix in EXTENSIONS:
+            continue
+
+        print(f'Handling {filepath}')
+
+        config_path = path.with_suffix('.txt')
+
+        try:
+            with config_path.open('r') as config_file:
+                card_config = yaml.safe_load(config_file)
+                print(f'Config found: {card_config}')
+        except FileNotFoundError:
+            pass
+
         with Image.open(path) as im:
             text = Path(path).stem
 
@@ -78,12 +95,11 @@ def run():
 
             card.paste(card_fill, (CARD_BORDER_SIZE, CARD_BORDER_SIZE))
             im = im.resize((IMAGE_WIDTH, IMAGE_WIDTH))
-            #im = im.thumbnail((CARD_WIDTH,CARD_WIDTH), Image.ANTIALIAS)
             card.paste(im, (CARD_BORDER_SIZE, CARD_BORDER_SIZE))
 
             card.paste(text_box, (0, IMAGE_HEIGHT - CARD_BORDER_SIZE))
             text = text.replace('__', "\n")
-            font = get_font(text, card, 'fonts/default.otf')
+            font = get_font(text, card, f"fonts/{card_config['font']}" if 'font' in card_config else 'fonts/default.otf')
 
             drawn_card = ImageDraw.Draw(card)
             drawn_card.multiline_text(
@@ -95,17 +111,41 @@ def run():
                 font=font,
                 spacing=40)
 
-            canvas.paste(card, (offset_x, offset_y))
-            offset_x += CARD_WIDTH + SPACING_X
+            if not page:
+                page = Image.new('RGB', (CANVAS_WIDTH, CANVAS_HEIGTH), color = (255, 255, 255))
+            
+            page.paste(card, (offset_x, offset_y))
+            offset_x += CARD_WIDTH 
 
-            if (offset_x > CANVAS_WIDTH + SPACING_X):
+            if (offset_x + CARD_WIDTH + DEFAULT_OFFSET_X > CANVAS_WIDTH):
                 offset_x = DEFAULT_OFFSET_X
                 offset_y += CARD_HEIGHT + SPACING_Y
-        
+            else:
+                offset_x += SPACING_X
+
+            if offset_y + CARD_HEIGHT + DEFAULT_OFFSET_Y > CANVAS_HEIGTH:
+                offset_y = DEFAULT_OFFSET_Y
+                offset_x = DEFAULT_OFFSET_X
+
+                pages.append(page)
+                page = Image.new('RGB', (CANVAS_WIDTH, CANVAS_HEIGTH), color = (255, 255, 255))
+                
         # archive image
         path.replace(ARCHIVE_PATH / path.name)
+        try:
+           config_path.replace(ARCHIVE_PATH / config_path.name)
+        except FileNotFoundError:
+           pass
 
-    canvas.save(Path('result') / f'cards_{datetime.now().strftime(f"%Y%m%d-%H%M")}.png')
+    if len(pages) == 0:
+        if page:
+            pages.append(page)
+        else:
+            print('No images found')
+            return
+
+    pages[0].save(Path('result') / f'cards_{datetime.now().strftime(f"%Y%m%d-%H%M")}.pdf', save_all=True, append_images=pages[1:])
+    #canvas.save(Path('result') / f'cards_{datetime.now().strftime(f"%Y%m%d-%H%M")}.png')
 
 if __name__ == '__main__':
   print("Start")
