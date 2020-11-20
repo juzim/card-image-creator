@@ -1,0 +1,7 @@
+.vscode
+images/*
+!images/.gitkeep
+result/*
+!result/.gitkeep
+fonts/*
+!fonts/.gitkeep
