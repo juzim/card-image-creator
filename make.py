@@ -13,6 +13,7 @@ IMAGE_HEIGHT = IMAGE_WIDTH
 TEXT_BOX_HEIGHT = CARD_HEIGHT - IMAGE_HEIGHT
 CANVAS_HEIGTH = 2480
 CANVAS_WIDTH = 3507
+FONT_PATH = Path('fonts')
 
 SPACING_X = 40
 SPACING_Y = 40
@@ -37,11 +38,13 @@ def build_text_box() -> Image:
     return text_box
 
 
-def get_font(lines: str, image: Image, font_family: str):
+def get_font(lines: str, image: Image, card_config: dict):
     fontsize = 1  # starting font size
 
     # portion of image width you want text width to be
     img_fraction = 0.85
+    
+    font_family = str(FONT_PATH / (card_config['font'] if 'font' in card_config else 'default.otf'))
 
     font = ImageFont.truetype(font_family, fontsize)
     while font.getsize_multiline(lines)[0] < img_fraction*image.size[0]:
@@ -99,7 +102,7 @@ def run():
 
             card.paste(text_box, (0, IMAGE_HEIGHT - CARD_BORDER_SIZE))
             text = text.replace('__', "\n")
-            font = get_font(text, card, f"fonts/{card_config['font']}" if 'font' in card_config else 'fonts/default.otf')
+            font = get_font(text, card, card_config)
 
             drawn_card = ImageDraw.Draw(card)
             drawn_card.multiline_text(
@@ -131,11 +134,11 @@ def run():
                 page = Image.new('RGB', (CANVAS_WIDTH, CANVAS_HEIGTH), color = (255, 255, 255))
                 
         # archive image
-        #path.replace(ARCHIVE_PATH / path.name)
-        #try:
-        #   config_path.replace(ARCHIVE_PATH / config_path.name)
-        #except FileNotFoundError:
-        #   pass
+        path.replace(ARCHIVE_PATH / path.name)
+        try:
+           config_path.replace(ARCHIVE_PATH / config_path.name)
+        except FileNotFoundError:
+           pass
     if page:
         pages.append(page)
 
