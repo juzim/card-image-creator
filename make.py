@@ -11,8 +11,8 @@ CARD_BORDER_SIZE = 2
 IMAGE_WIDTH = CARD_WIDTH - CARD_BORDER_SIZE * 2
 IMAGE_HEIGHT = IMAGE_WIDTH
 TEXT_BOX_HEIGHT = CARD_HEIGHT - IMAGE_HEIGHT
-CANVAS_HEIGTH = 3508
-CANVAS_WIDTH = 2480
+CANVAS_HEIGTH = 2480
+CANVAS_WIDTH = 3507
 
 SPACING_X = 40
 SPACING_Y = 40
@@ -131,18 +131,17 @@ def run():
                 page = Image.new('RGB', (CANVAS_WIDTH, CANVAS_HEIGTH), color = (255, 255, 255))
                 
         # archive image
-        path.replace(ARCHIVE_PATH / path.name)
-        try:
-           config_path.replace(ARCHIVE_PATH / config_path.name)
-        except FileNotFoundError:
-           pass
+        #path.replace(ARCHIVE_PATH / path.name)
+        #try:
+        #   config_path.replace(ARCHIVE_PATH / config_path.name)
+        #except FileNotFoundError:
+        #   pass
+    if page:
+        pages.append(page)
 
     if len(pages) == 0:
-        if page:
-            pages.append(page)
-        else:
-            print('No images found')
-            return
+        print('No images found')
+        return
 
     pages[0].save(Path('result') / f'cards_{datetime.now().strftime(f"%Y%m%d-%H%M")}.pdf', save_all=True, append_images=pages[1:])
     #canvas.save(Path('result') / f'cards_{datetime.now().strftime(f"%Y%m%d-%H%M")}.png')
