@@ -1,6 +1,7 @@
 from PIL import Image, ImageDraw, ImageFont
 import glob
 from pathlib import Path
+from datetime import datetime
 
 root = Path(__file__).parent.absolute()
 image_path = root / 'images'
@@ -50,11 +51,11 @@ def wrap_text(text, width, font):
 
     return "\n".join(text_lines)
 
-def get_font_size(lines, Image, font_family):
+def get_font(lines, image, font_family):
     fontsize = 1  # starting font size
 
     # portion of image width you want text width to be
-    img_fraction = 0.50
+    img_fraction = 0.85
 
     font = ImageFont.truetype(font_family, fontsize)
     while font.getsize_multiline(lines)[0] < img_fraction*image.size[0]:
@@ -85,19 +86,20 @@ for filepath in glob.iglob(r'images/*.*'):
         im = im.resize((IMAGE_WIDTH, IMAGE_WIDTH))
         #im = im.thumbnail((CARD_WIDTH,CARD_WIDTH), Image.ANTIALIAS)
         card.paste(im, (CARD_BORDER_SIZE, CARD_BORDER_SIZE))
-        card_text = text_box.copy()
         
-        card.paste(card_text, (0, IMAGE_HEIGHT - CARD_BORDER_SIZE))
+        card.paste(text_box, (0, IMAGE_HEIGHT - CARD_BORDER_SIZE))
         drawn_card = ImageDraw.Draw(card)
-        font = ImageFont.truetype('fonts/default.otf', 60)
-        text = wrap_text(text, card_text.size[1], font)
-        #font = get_font_size(text, drawn_card, 'fonts/default.otf')
+        text = text.replace('__', "\n")
+        #text = wrap_text(text, card_text.size[1], font)
+        font = get_font(text, card, 'fonts/default.otf')
 
         drawn_card.multiline_text(
             (int(CARD_WIDTH / 2), IMAGE_HEIGHT + 90), 
             text, 
             fill="black", 
-            anchor="ms", align='center', font=font,
+            anchor="ms", 
+            align='center', 
+            font=font,
             spacing=40)
         
         canvas.paste(card, (offset_x, offset_y))
@@ -107,8 +109,6 @@ for filepath in glob.iglob(r'images/*.*'):
             offset_x = DEFAULT_OFFSET_X
             offset_y += CARD_HEIGHT + SPACING_Y
 
-
-   
-canvas.save('cards.png')
+canvas.save(Path('result') / f'cards_{datetime.now().strftime(f"%Y%m%d-%H%M")}.png')
 
 print("Done")
