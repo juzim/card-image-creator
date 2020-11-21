@@ -24,8 +24,15 @@ This scripts helps you create printable pdf files of images with text below. My 
 - Chooses best font-size for text length 
 
 
+## Installation
+
+
+## Run
+
 ## Todo
 [ ] Global config file
 
 [ ] More card configurations
+
+[ ] Docker container
 

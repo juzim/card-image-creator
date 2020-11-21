@@ -2,7 +2,6 @@ from PIL import Image, ImageDraw, ImageFont
 import glob
 from pathlib import Path
 from datetime import datetime
-import fire
 import yaml
 
 CARD_WIDTH = 640
@@ -147,9 +146,8 @@ def run():
         return
 
     pages[0].save(Path('result') / f'cards_{datetime.now().strftime(f"%Y%m%d-%H%M")}.pdf', save_all=True, append_images=pages[1:])
-    #canvas.save(Path('result') / f'cards_{datetime.now().strftime(f"%Y%m%d-%H%M")}.png')
 
 if __name__ == '__main__':
   print("Start")
-  fire.Fire(run)
+  run()
   print("Done")
