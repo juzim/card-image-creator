@@ -27,14 +27,25 @@ This scripts helps you create printable pdf files of images with text below. My 
 
 
 ## Installation
+Install Python 3 and pip
 
+Clone the repository or download the files
+
+Run `pip3 install -r requirements.txt` in the folder root
 
 ## Run
+Adapt the config if needed
+
+Run `python3 make.py`
 
 ## Todo
-[ ] Global config file
+[x] Global config file
 
-[ ] More card configurations
+[x] More card configurations
 
 [ ] Docker container
+
+[ ] Binary builds for Windows
+
+[ ] GUI
 
