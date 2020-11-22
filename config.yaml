@@ -1,0 +1,12 @@
+page_spacing_x: 40
+page_spacing_y: 40
+page_margin_x: 50
+page_margin_y: 50
+
+card_height: 1008
+card_border_size: 2
+card_width: 640
+card_height: 1010
+card_min_font_size: 10
+card_max_font_size: 100
+card_text_color: black

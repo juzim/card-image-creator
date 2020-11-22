@@ -16,9 +16,11 @@ This scripts helps you create printable pdf files of images with text below. My 
 - Turns "__" into linebreaks
 - Resizes the image (aspect ratio must be 1:1)
 - Additional configuration for each image by adding a text file with the same name (yaml syntax)
-    - Font
+    - Font family
+    - Fixed, max and min font size
+    - Font color
+    - Custom Text
     - Background Colors (todo)
-    - Fixed, max and min font size (todo)
 - Splits result into multiple pages
 - Archives processed images
 - Chooses best font-size for text length 
