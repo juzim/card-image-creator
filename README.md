@@ -26,17 +26,21 @@ This scripts helps you create printable pdf files of images with text below. My 
 - Chooses best font-size for text length 
 
 
-## Installation
+## Run
+The result files are generated in the `result` folder.
+### Python
 Install Python 3 and pip
 
 Clone the repository or download the files
 
 Run `pip3 install -r requirements.txt` in the folder root
 
-## Run
 Adapt the config if needed
 
 Run `python3 make.py`
+
+### Windows
+Execute the `make.exe` file
 
 ## Todo
 [x] Global config file

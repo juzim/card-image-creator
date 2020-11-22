@@ -7,3 +7,9 @@ result/*
 !result/.gitkeep
 fonts/*
 !fonts/.gitkeep
+
+#pyinstaller
+__pychache__/
+build/
+dist
+make.spec
