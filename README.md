@@ -77,3 +77,9 @@ The result files are generated in the `result` folder. If the config value `arch
 [ ] Include default fonts
 
 [ ] Config for input and archive folders
+
+[ ] Add some tests
+
+[ ] Make text processing configurable ('__' etc)
+
+[ ] Clean up config values
