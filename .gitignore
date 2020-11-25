@@ -1,4 +1,3 @@
-.vscode
 images/archive/*
 !images/archive/.gitkeep
 images/*
@@ -9,7 +8,11 @@ fonts/*
 !fonts/.gitkeep
 
 #pyinstaller
-__pychache__/
+__pycache__/
 build/
 dist
 make.spec
+
+#vscode
+.vscode
+.history

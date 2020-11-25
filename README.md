@@ -26,8 +26,25 @@ This scripts helps you create printable pdf files of images with text below. My 
 - Chooses best font-size for text length 
 
 
-## Run
-The result files are generated in the `result` folder.
+## Installation
+1. Download/clone the repository
+
+2. Setup the default font 
+You have to point the config key 'font' to a valid font file.
+
+Example:
+
+```
+font_folder: C:\Windows\Fonts # Windows
+font: ariblk.ttf
+```
+
+3. Put images in the `images` folder
+The text gets extracted from the filename (if not specified in the card config file, see below). 
+
+4. (Optional) customize cards
+All card-specific config values can be overwritten by putting them in a yaml file with the same name as the image. The text can also be changed in the file.
+
 ### Python
 Install Python 3 and pip
 
@@ -35,12 +52,14 @@ Clone the repository or download the files
 
 Run `pip3 install -r requirements.txt` in the folder root
 
-Adapt the config if needed
-
 Run `python3 make.py`
 
 ### Windows
 Execute the `make.exe` file
+
+
+## Result
+The result files are generated in the `result` folder. If the config value `archive` is set, the processed files are moved to the archive folder.
 
 ## Todo
 [x] Global config file
@@ -49,7 +68,12 @@ Execute the `make.exe` file
 
 [ ] Docker container
 
-[ ] Binary builds for Windows
+[x] Binary builds for Windows
 
 [ ] GUI
 
+[ ] Add way to split text in title and subtitle
+
+[ ] Include default fonts
+
+[ ] Config for input and archive folders

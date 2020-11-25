@@ -44,14 +44,22 @@ def get_font(lines: str, image: Image, card_config: dict):
 
     # portion of image width you want text width to be
     img_fraction = 0.85
-    
-    font_family = str(FONT_PATH / (card_config['font'] if 'font' in card_config else 'default.otf'))
+    font_name = card_config['font']
+    font_path = Path(font_name)
 
-    font = ImageFont.truetype(font_family, fontsize)
+    try:
+        font = ImageFont.truetype(str(font_path), fontsize)
+    except OSError:
+        try:
+            font_path = Path(card_config['font_folder'],  font_name)
+            font = ImageFont.truetype(str(font_path), fontsize)
+        except OSError:
+            raise Exception(f'Font [{font_name}] not found in absolute path or font_folder [{card_config["font_folder"]}]')
+
     while font.getsize_multiline(lines)[0] < img_fraction*image.size[0] and fontsize <= card_config[CONFIG_KEY_CARD_MAX_FONT_SIZE]:
         # iterate until the text size is just larger than the criteria
         fontsize += 1
-        font = ImageFont.truetype(font_family, fontsize)
+        font = ImageFont.truetype(str(font_path), fontsize)
 
     # optionally de-increment to be sure it is less than criteria
     fontsize -= 1
@@ -79,7 +87,7 @@ def run(config: dict):
 
         print(f'Handling {filepath}')
 
-        config_path = path.with_suffix('.txt')
+        config_path = path.with_suffix('.yaml')
         try:
             with config_path.open('r') as config_file:
                 loaded_card_config = yaml.safe_load(config_file)

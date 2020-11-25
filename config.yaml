@@ -3,6 +3,11 @@ page_spacing_y: 40
 page_margin_x: 50
 page_margin_y: 50
 
+font_folder: fonts # folder in project
+# font_folder: C:\Windows\Fonts # Windows
+# font_folder: /usr/share/fonts # Ubuntu
+font: default.otf
+
 card_height: 1008
 card_border_size: 2
 card_width: 640
