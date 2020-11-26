@@ -6,12 +6,13 @@ page_margin_y: 50
 font_folder: fonts # folder in project
 # font_folder: C:\Windows\Fonts # Windows
 # font_folder: /usr/share/fonts # Ubuntu
-font: default.otf
-
 card_height: 1008
-card_border_size: 2
 card_width: 640
-card_height: 1010
-card_min_font_size: 10
-card_max_font_size: 100
-card_text_color: black
+ 
+card:
+  border_size: 2
+  text_defaults:
+    font: default.otf
+    min_font_size: 10
+    max_font_size: 100
+    text_color: black

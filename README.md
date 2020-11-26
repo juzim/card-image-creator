@@ -83,3 +83,5 @@ The result files are generated in the `result` folder. If the config value `arch
 [ ] Make text processing configurable ('__' etc)
 
 [ ] Clean up config values
+
+[x] Fix custom border width
