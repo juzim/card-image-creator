@@ -11,6 +11,7 @@ card_width: 640
  
 card:
   border_size: 2
+  border_color: black
   text_defaults:
     font: default.otf
     min_font_size: 10

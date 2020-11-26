@@ -1,4 +1,4 @@
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageOps
 import glob
 from pathlib import Path
 from datetime import datetime
@@ -31,10 +31,7 @@ ARCHIVE_PATH = INPUT_PATH / 'archive'
 CONFIG_PATH = ROOT / 'config.yaml'
 
 def build_text_box(card_width: int, text_box_height: int, card_border_size: int) -> Image:
-    text_box = Image.new('RGB', (card_width, text_box_height), color = (0,0,0))
-    text_box_fill = Image.new('RGB', (card_width - card_border_size * 2, text_box_height - card_border_size * 2), color = (255,255,255))
-
-    text_box.paste(text_box_fill, (card_border_size, card_border_size))
+    text_box = Image.new('RGB', (card_width, text_box_height), color = (255,255,255))
 
     return text_box
 
@@ -71,22 +68,22 @@ def get_config_path(path):
     return path.with_suffix('.yaml')
 
 def handle_card(image_path: Path, card_config: dict, global_config):
-    card_height = global_config['card_height']
-    card_width = global_config['card_width']
-
     card_border_size = card_config['border_size']
-    image_width = card_width - card_border_size * 2
+    card_border_color = card_config['border_color']
+    card_height = global_config['card_height'] - card_border_size * 2
+    card_width = global_config['card_width'] - card_border_size * 2
+
+    image_width = card_width 
     image_height = image_width # image can not be cropped yet
     text_box_height = card_height - image_height
 
-    print(image_height, card_height,  text_box_height)
-     
     with Image.open(image_path) as im:
         im = im.convert('RGB')
-        card = Image.new('RGB', (card_width, card_height), color = (0, 0, 0))
+        card = Image.new('RGB', (card_width, card_height), color = (255, 255, 255))
 
         im = im.resize((image_height, image_width))
-        card.paste(im, (card_border_size, card_border_size))
+        #card.paste(im, (card_border_size, card_border_size))
+        card.paste(im, (0, 0))
 
         text_box = build_text_box(card_width, text_box_height, card_border_size)
 
@@ -130,7 +127,10 @@ def handle_card(image_path: Path, card_config: dict, global_config):
             text_margin_top += font.getsize_multiline(text)[1] + 40
 
 
-        card.paste(text_box, (0, image_height))
+        text_box = ImageOps.expand(text_box, border=card_border_size, fill=card_border_color)
+        card.paste(text_box, (0 - card_border_size, image_height))
+
+        card = ImageOps.expand(card, border=card_border_size, fill=card_border_color)
 
         return card
 
