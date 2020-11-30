@@ -98,14 +98,14 @@ def handle_card(image_path: Path, card_config: dict, global_config):
 
         for text_config in texts:
             text_config = {**card_config['text_defaults'], **text_config}
-            text = text_config['content'].replace('__', "\n").replace('_', ' ')
+            text_config['content'] = text_config['content'].replace('__', "\n").replace('_', ' ')
 
             font = get_font(card.size[0], text_config, global_config)
             # unreliable
             #if font.getsize_multiline(text)[1] + text_margin_top > text_box.size[1]:
             #   raise Exception(f'Text {font.getsize_multiline(text)[1]} does not fit box {text_box.size[1]}')
 
-            font_size = font.getsize_multiline(text)
+            font_size = font.getsize_multiline(text_config['content'])
             font_height = font_size[0]
             font_width = font_size[1]
 
@@ -116,7 +116,7 @@ def handle_card(image_path: Path, card_config: dict, global_config):
 
             drawn_text_box.multiline_text(
                 (int(card_width / 2), text_margin_top), 
-                text, 
+                text_config['content'], 
                 fill=text_config[CONFIG_KEY_CARD_TEXT_COLOR], 
                 anchor="ma", 
                 align='center', 
@@ -124,7 +124,7 @@ def handle_card(image_path: Path, card_config: dict, global_config):
                 spacing=40)
             
             #text_box.paste(text_box, (0, text_margin_top))
-            text_margin_top += font.getsize_multiline(text)[1] + 40
+            text_margin_top += font.getsize_multiline(text_config['content'])[1] + 40
 
 
         text_box = ImageOps.expand(text_box, border=card_border_size, fill=card_border_color)
@@ -154,7 +154,7 @@ def run(global_config: dict):
 
         print(f'Handling {path}')
 
-        card_config = global_config['card']
+        card_config = {**global_config['card']}
 
         config_path = get_config_path(path)
         loaded_card_config = None
