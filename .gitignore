@@ -6,7 +6,7 @@ result/*
 !result/.gitkeep
 fonts/*
 !fonts/.gitkeep
-
+config.yaml
 #pyinstaller
 __pycache__/
 build/

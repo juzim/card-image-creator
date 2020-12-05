@@ -1,0 +1,44 @@
+page_spacing_x: 40
+page_spacing_y: 40
+page_margin_x: 50
+page_margin_y: 50
+
+font_folder: fonts # folder in project
+# font_folder: C:\Windows\Fonts # Windows
+# font_folder: /usr/share/fonts # Ubuntu
+card_height: 1008
+card_width: 640
+
+folders:
+  audiobook:
+    color: blue
+    text: Hörbuch
+    font: fonts/default.otf
+    text_color: white
+  song:
+    color: red
+    font: fonts/default.otf
+    text: Lied
+    text_color: white
+  album:
+    color: green
+    font: fonts/default.otf
+    text: Album
+    text_color: white
+
+card:
+  border_size: 2
+  border_color: black
+
+# default font configuration
+  text_defaults:
+    font: Jumping Unicorn.ttf
+    min_font_size: 10
+    max_font_size: 100
+    text_color: black
+# default configuration for first line
+#  text_defaults_0:
+#    font: coolvetica.ttf
+#    min_font_size: 10
+#    max_font_size: 40
+#    text_color: black
