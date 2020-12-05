@@ -14,6 +14,7 @@ This scripts helps you create printable pdf files of images with text below. My 
 ## Features
 - Puts image on top and filename as text below
 - Turns "__" into linebreaks
+- Each ine can be styled
 - Resizes the image (aspect ratio must be 1:1)
 - Additional configuration for each image by adding a text file with the same name (yaml syntax)
     - Font family
@@ -29,8 +30,10 @@ This scripts helps you create printable pdf files of images with text below. My 
 ## Installation
 1. Download/clone the repository
 
+2. Copy `config.example.yaml` to `config.yaml`
+
 2. Setup the default font 
-You have to point the config key 'font' to a valid font file.
+You have to point the config key 'font' in `config.yaml` to a valid font file.
 
 Example:
 
@@ -45,6 +48,11 @@ The text gets extracted from the filename (if not specified in the card config f
 4. (Optional) customize cards
 All card-specific config values can be overwritten by putting them in a yaml file with the same name as the image. The text can also be changed in the file.
 
+### Docker
+1. Build the image with `docker build -t cardmaker .`
+
+2. Run the container `docker run --user $(id -u):$(id -g) --rm -v $(pwd):/app cardmaker`
+
 ### Python
 Install Python 3 and pip
 
@@ -52,11 +60,13 @@ Clone the repository or download the files
 
 Run `pip3 install -r requirements.txt` in the folder root
 
-Run `python3 make.py`
+Run `python3 src/make.py`
 
 ### Windows
-Execute the `make.exe` file
 
+!!! Since I don't use windows, this might be broken. Rnning the script in WSL works great.
+
+Execute the `bin/make.exe` file
 
 ## Result
 The result files are generated in the `result` folder. If the config value `archive` is set, the processed files are moved to the archive folder.
@@ -72,7 +82,7 @@ The result files are generated in the `result` folder. If the config value `arch
 
 [ ] GUI
 
-[ ] Add way to split text in title and subtitle
+[x] Add way to split text in title and subtitle
 
 [ ] Include default fonts
 
